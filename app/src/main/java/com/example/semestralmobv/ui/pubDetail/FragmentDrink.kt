@@ -16,6 +16,7 @@ class FragmentDrink : Fragment() {
     private var _binding: FragmentDrinkBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var animationView: LottieAnimationView
 
     private var name = ""
     private var pubName = ""
@@ -46,7 +47,7 @@ class FragmentDrink : Fragment() {
         nameView.text = name
         pubNameView.text = pubName
 
-        val animationView: LottieAnimationView = binding.animationView
+        animationView = binding.animationView
         animationView.playAnimation()
 
         val playButton: Button = binding.showButton

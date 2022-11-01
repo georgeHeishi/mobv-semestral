@@ -41,6 +41,10 @@
         <action
             android:id="@+id/action_pubList_to_fragmentPubInfo"
             app:destination="@id/fragmentPubInfo" />
+        <argument
+            android:name="idToRemove"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/fragmentPubInfo"

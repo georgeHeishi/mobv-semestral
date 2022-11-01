@@ -44,12 +44,4 @@ class PubItemViewAdapter(
     override fun getItemCount(): Int {
         return dataset.size;
     }
-
-    fun notifyPubsChanged() {
-        notifyDataSetChanged()
-    }
-
-    fun notifyPubMoved(from: Int, to: Int) {
-        notifyItemMoved(from, to)
-    }
 }

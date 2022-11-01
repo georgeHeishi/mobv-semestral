@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.example.semestralmobv.databinding.FragmentPubInfoBinding
@@ -16,24 +16,10 @@ import com.example.semestralmobv.data.pubs.viewmodel.PubsViewModel
 class FragmentPubInfo : Fragment() {
     private var _binding: FragmentPubInfoBinding? = null
     private val binding get() = _binding!!
-    private val pubsViewModel: PubsViewModel by viewModels()
 
-    private var id: String = ""
+    private lateinit var pubsViewModel: PubsViewModel
+    private lateinit var nav: NavController
     private lateinit var pub: Pub
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        id = arguments?.getString("id").toString()
-
-        val foundPub = pubsViewModel.pubs.value?.find { it.id == id }
-
-        if (foundPub === null) {
-            pub = Pub(id, 0.0f, 0.0f, null)
-            return
-        }
-
-        pub = foundPub
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -44,6 +30,19 @@ class FragmentPubInfo : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        activity?.let { pubsViewModel = ViewModelProvider(it)[PubsViewModel::class.java] }
+        nav = view.findNavController()
+
+        val id = arguments?.getString("id").toString()
+        val foundPub = pubsViewModel.pubs.value?.find { it.id == id }
+
+        if (foundPub === null) {
+            nav.navigate(FragmentPubInfoDirections.actionFragmentPubInfoToPubList(null))
+            return
+        }
+
+        pub = foundPub
+
         binding.infoPubName.text = pub.tags?.name
         binding.infoPubType.text = pub.tags?.amenity
         binding.infoPubLat.text = pub.lat.toString()
@@ -52,10 +51,8 @@ class FragmentPubInfo : Fragment() {
         binding.infoPubWebsite.text = pub.tags?.website
 
         val deleteButton: Button = binding.deleteButton
-        val nav: NavController = view.findNavController()
-//        deleteButton.setOnClickListener {
-//            PubsSingleton.pubs.remove(pub)
-//            nav.navigate(FragmentPubInfoDirections.actionFragmentPubInfoToPubList())
-//        }
+        deleteButton.setOnClickListener {
+            nav.navigate(FragmentPubInfoDirections.actionFragmentPubInfoToPubList(pub.id))
+        }
     }
 }
