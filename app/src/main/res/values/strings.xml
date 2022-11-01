@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">semestralmobv</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="show">Ukáž na mape</string>
+    <string name="enter_information">Zadajte údaje</string>
+    <string name="name">Zadajte meno</string>
+    <string name="pub_name">Zadajte názov podniku</string>
+    <string name="pub_long">Zadajte zem. dĺžku podniku</string>
+    <string name="pub_lat">Zadajte zem. šírku podniku</string>
+    <string name="confirm">Potvrdiť</string>
+    <string name="pub_item_name_placeholder">Placeholder</string>
+    <string name="add_item">Pridať</string>
+    <string name="delete_item">Vymazať</string>
+    <string name="default_sort">Predvolené</string>
+    <string name="name_sort">Meno</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

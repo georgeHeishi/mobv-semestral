@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/pubList">
+    <fragment
+        android:id="@+id/fragmentInput"
+        android:name="com.example.semestralmobv.ui.pubInput.FragmentInput"
+        android:label="FragmentInput" >
+        <action
+            android:id="@+id/action_fragmentInput_to_fragmentDrink"
+            app:destination="@id/fragmentDrink" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentDrink"
+        android:name="com.example.semestralmobv.ui.pubDetail.FragmentDrink"
+        android:label="fragment_drink"
+        tools:layout="@layout/fragment_drink" >
+        <argument
+            android:name="name"
+            app:argType="string" />
+        <argument
+            android:name="pubName"
+            app:argType="string" />
+        <argument
+            android:name="gpsLat"
+            app:argType="string" />
+        <argument
+            android:name="gpsLong"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/pubList"
+        android:name="com.example.semestralmobv.ui.pubList.FragmentPubList"
+        android:label="fragment_pub_list"
+        tools:layout="@layout/fragment_pub_list" >
+        <action
+            android:id="@+id/action_pubList_to_fragmentInput"
+            app:destination="@id/fragmentInput" />
+        <action
+            android:id="@+id/action_pubList_to_fragmentPubInfo"
+            app:destination="@id/fragmentPubInfo" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentPubInfo"
+        android:name="com.example.semestralmobv.ui.pubDetail.FragmentPubInfo"
+        android:label="fragment_pub_info"
+        tools:layout="@layout/fragment_pub_info" >
+        <action
+            android:id="@+id/action_fragmentPubInfo_to_pubList"
+            app:destination="@id/pubList" />
+        <argument
+            android:name="id"
+            app:argType="string" />
+    </fragment>
+</navigation>
