@@ -3,14 +3,13 @@ package com.example.semestralmobv
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import com.example.semestralmobv.data.pubs.viewmodel.PubsViewModel
+import com.example.semestralmobv.viewmodels.PubsViewModel
 import com.example.semestralmobv.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {

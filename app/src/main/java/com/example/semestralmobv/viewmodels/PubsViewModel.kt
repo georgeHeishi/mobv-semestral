@@ -1,4 +1,4 @@
-package com.example.semestralmobv.data.pubs.viewmodel
+package com.example.semestralmobv.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -6,9 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.semestralmobv.api.PubsApi
-import com.example.semestralmobv.data.pubs.model.Pub
-import com.example.semestralmobv.data.pubs.model.PubsArgs
-import com.example.semestralmobv.data.pubs.model.PubsData
+import com.example.semestralmobv.api.models.Pub
+import com.example.semestralmobv.api.models.PubsArgs
+import com.example.semestralmobv.api.models.PubsData
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback

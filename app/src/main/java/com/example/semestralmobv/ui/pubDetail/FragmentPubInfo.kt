@@ -10,8 +10,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.example.semestralmobv.databinding.FragmentPubInfoBinding
-import com.example.semestralmobv.data.pubs.model.Pub
-import com.example.semestralmobv.data.pubs.viewmodel.PubsViewModel
+import com.example.semestralmobv.api.models.Pub
+import com.example.semestralmobv.viewmodels.PubsViewModel
 
 class FragmentPubInfo : Fragment() {
     private var _binding: FragmentPubInfoBinding? = null

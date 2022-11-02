@@ -10,10 +10,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.airbnb.lottie.LottieAnimationView
 import com.example.semestralmobv.databinding.FragmentPubListBinding
 import com.example.semestralmobv.ui.pubList.adapters.PubItemViewAdapter
-import com.example.semestralmobv.data.pubs.viewmodel.PubsViewModel
+import com.example.semestralmobv.viewmodels.PubsViewModel
 import com.google.android.material.chip.Chip
 
 class FragmentPubList : Fragment() {
@@ -24,9 +25,12 @@ class FragmentPubList : Fragment() {
     private var _binding: FragmentPubListBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var swipeContainer: SwipeRefreshLayout
     private lateinit var pubsViewModel: PubsViewModel
     private lateinit var nav: NavController
     private lateinit var recyclerView: RecyclerView
+    private lateinit var defaultSortChip: Chip
+    private lateinit var nameSortChip: Chip
     private var adapter: RecyclerView.Adapter<PubItemViewAdapter.ItemViewHolder>? = null
     private lateinit var spinner: LottieAnimationView
     private var sortBy: SortBy = SortBy.DEFAULT
@@ -42,6 +46,7 @@ class FragmentPubList : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         activity?.let { pubsViewModel = ViewModelProvider(it)[PubsViewModel::class.java] }
         nav = view.findNavController()
+        swipeContainer = binding.swipeContainer
         recyclerView = binding.recyclerView
         spinner = binding.spinner
 
@@ -54,39 +59,39 @@ class FragmentPubList : Fragment() {
         pubsViewModel.pubs.observe(viewLifecycleOwner) {
             setAdapter()
             stopLoading()
+            defaultSortChip.isChecked = true
+            nameSortChip.isChecked = false
+        }
+
+        swipeContainer.setOnRefreshListener {
+            pubsViewModel.getPubs()
         }
 
         val addButton = binding.addButton
         addButton.setOnClickListener {
-            nav.navigate(FragmentPubListDirections.actionPubListToFragmentInput())
+//            UNCOMMENT WHEN NEEDED
+//            nav.navigate(FragmentPubListDirections.actionPubListToFragmentInput())
         }
 
-        val defaultSortChip: Chip = binding.defaultSortChip
-        val nameSortChip: Chip = binding.nameSortChip
+        defaultSortChip = binding.defaultSortChip
+        nameSortChip = binding.nameSortChip
 
         defaultSortChip.setOnClickListener {
             startLoading()
-            if (sortBy === SortBy.DEFAULT) {
-                sortBy = SortBy.NAME
-                sortByName()
-            } else {
-                sortBy = SortBy.DEFAULT
-                setDefaultDataset()
-            }
-            nameSortChip.isChecked = sortBy === SortBy.NAME
+            sortBy = SortBy.DEFAULT
+            setDefaultDataset()
+
+            defaultSortChip.isChecked = true
+            nameSortChip.isChecked = false
         }
 
         nameSortChip.setOnClickListener {
             startLoading()
-            if (sortBy === SortBy.NAME) {
-                sortBy = SortBy.DEFAULT
-                setDefaultDataset()
-            } else {
-                sortBy = SortBy.NAME
-                sortByName()
-            }
+            sortBy = SortBy.NAME
+            sortByName()
 
-            defaultSortChip.isChecked = sortBy === SortBy.DEFAULT
+            nameSortChip.isChecked = true
+            defaultSortChip.isChecked = false
         }
     }
 
@@ -111,6 +116,7 @@ class FragmentPubList : Fragment() {
         spinner.isVisible = false
         spinner.cancelAnimation()
         recyclerView.isVisible = true
+        swipeContainer.isRefreshing = false
     }
 
     private fun startLoading() {

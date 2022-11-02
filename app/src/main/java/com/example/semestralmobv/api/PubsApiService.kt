@@ -1,7 +1,7 @@
 package com.example.semestralmobv.api
 
-import com.example.semestralmobv.data.pubs.model.PubsArgs
-import com.example.semestralmobv.data.pubs.model.PubsData
+import com.example.semestralmobv.api.models.PubsArgs
+import com.example.semestralmobv.api.models.PubsData
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

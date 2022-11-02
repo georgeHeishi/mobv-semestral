@@ -36,9 +36,6 @@
         android:label="fragment_pub_list"
         tools:layout="@layout/fragment_pub_list" >
         <action
-            android:id="@+id/action_pubList_to_fragmentInput"
-            app:destination="@id/fragmentInput" />
-        <action
             android:id="@+id/action_pubList_to_fragmentPubInfo"
             app:destination="@id/fragmentPubInfo" />
         <argument

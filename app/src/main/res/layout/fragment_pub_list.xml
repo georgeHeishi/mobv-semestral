@@ -1,76 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swipe_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.pubList.FragmentPubList">
+    android:layout_height="match_parent">
 
-
-    <com.google.android.material.chip.Chip
-        android:id="@+id/default_sort_chip"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:checkable="true"
-        android:checked="true"
-        android:text="@string/default_sort"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.chip.Chip
-        android:id="@+id/name_sort_chip"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:checkable="true"
-        android:text="@string/name_sort"
-        android:textSize="20sp"
-        app:layout_constraintStart_toEndOf="@+id/default_sort_chip"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:name="com.example.semestralmobv.PubList"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:scrollbars="vertical"
-        android:visibility="invisible"
-        app:layoutManager="LinearLayoutManager"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/default_sort_chip"
-        tools:listitem="@layout/pub_list_item" />
+        android:layout_height="match_parent"
+        tools:context=".ui.pubList.FragmentPubList">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/add_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="32dp"
-        android:backgroundTint="@color/teal_200"
-        android:contentDescription="@string/add_item"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/plus" />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/default_sort_chip"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:checkable="true"
+            android:checked="true"
+            android:text="@string/default_sort"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/spinner"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:layout_marginTop="64dp"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name_sort_chip"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
-        app:lottie_rawRes="@raw/greenspinner" />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/name_sort_chip"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:checkable="true"
+            android:text="@string/name_sort"
+            android:textSize="20sp"
+            app:layout_constraintStart_toEndOf="@+id/default_sort_chip"
+            app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:name="com.example.semestralmobv.PubList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:scrollbars="vertical"
+            android:visibility="invisible"
+            app:layoutManager="LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/default_sort_chip"
+            tools:listitem="@layout/pub_list_item" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="32dp"
+            android:backgroundTint="@color/teal_200"
+            android:contentDescription="@string/add_item"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/plus" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/spinner"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_marginTop="64dp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/name_sort_chip"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/greenspinner" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

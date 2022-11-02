@@ -1,7 +1,5 @@
 package com.example.semestralmobv.ui.pubList.adapters
 
-import android.annotation.SuppressLint
-import android.util.Log
 import android.view.LayoutInflater
 import androidx.recyclerview.widget.RecyclerView
 import android.view.View
@@ -10,7 +8,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.navigation.NavController
 import com.example.semestralmobv.R
-import com.example.semestralmobv.data.pubs.model.Pub
+import com.example.semestralmobv.api.models.Pub
 import com.example.semestralmobv.ui.pubList.FragmentPubListDirections
 
 class PubItemViewAdapter(
