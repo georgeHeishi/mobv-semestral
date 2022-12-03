@@ -14,7 +14,7 @@ class PubDetailViewModel(private val dataRepository: DataRepository) : ViewModel
 
     val pubs: LiveData<List<PubItem>?> = liveData {
         loading.postValue(true)
-        emit(dataRepository.getAllFromDb(false,SortBy.DEFAULT))
+        emit(dataRepository.getAllPubsFromDb(false,SortBy.DEFAULT))
         loading.postValue(false)
     }
 

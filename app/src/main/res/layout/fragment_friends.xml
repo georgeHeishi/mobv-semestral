@@ -1,73 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <import type="android.view.View" />
 
         <variable
             name="navController"
             type="androidx.navigation.NavController" />
 
-        <import type="android.view.View" />
-
-        <import type="com.example.semestralmobv.ui.viewmodels.SortBy" />
-
         <variable
             name="model"
-            type="com.example.semestralmobv.ui.viewmodels.PubsViewModel" />
+            type="com.example.semestralmobv.ui.viewmodels.FriendsViewModel" />
     </data>
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/default_sort_chip"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:checkable="true"
-            android:checked="@{model.sortBy == SortBy.DEFAULT ? true : false}"
-            android:text="@string/default_sort"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/name_sort_chip"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:checkable="true"
-            android:checked="@{model.sortBy == SortBy.NAME ? true : false}"
-            android:text="@string/name_sort"
-            android:textSize="16sp"
-            app:layout_constraintStart_toEndOf="@+id/default_sort_chip"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="64dp"
-            android:layout_marginBottom="64dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="parent">
 
-            <com.example.semestralmobv.ui.components.pubsRecyclerView.widget.PubsRecyclerView
+            <com.example.semestralmobv.ui.components.friendsRecyclerView.widget.FriendsRecyclerView
                 android:id="@+id/recycle_view"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:scrollbars="vertical"
                 android:visibility="@{model.loading ? View.INVISIBLE : View.VISIBLE}"
-                app:navController="@{navController}"
-                app:pubItems="@{model.pubs}" />
+                app:friendItems="@{model.friends}"
+                app:navController="@{navController}" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/addFriends"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="80dp"
+            android:backgroundTint="@color/green_500"
+            android:contentDescription="@string/add_friend"
+            android:text="@string/add_friend"
+            android:textColor="@color/white"
+            app:icon="@drawable/plus"
+            app:iconTint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/spinner"
@@ -90,7 +77,5 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </layout>

@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -15,6 +17,7 @@ import com.example.semestralmobv.databinding.FragmentSignupBinding
 import com.example.semestralmobv.ui.viewmodels.AuthorizationViewModel
 import com.example.semestralmobv.utils.PasswordUtils
 import com.example.semestralmobv.utils.PreferencesData
+import com.example.semestralmobv.utils.SystemUtils
 import com.example.semestralmobv.utils.ViewModelFactoryProvider
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -41,6 +44,10 @@ class FragmentSignup : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        activity?.findViewById<ImageView>(R.id.back_button)?.visibility = View.GONE
+        activity?.findViewById<TextView>(R.id.screen_title)?.text = ""
+        activity?.findViewById<ImageView>(R.id.logout)?.visibility = View.GONE
+
         super.onViewCreated(view, savedInstanceState)
 
         nav = view.findNavController()
@@ -56,7 +63,7 @@ class FragmentSignup : Fragment() {
             model = authorizationViewModel
         }.also { bnd ->
             bnd.signup.setOnClickListener {
-
+                SystemUtils.closeKeyboard(view)
                 if (bnd.usernameInput.text.toString().isNotBlank()
                     && bnd.passwordInput.text.toString().isNotBlank()
                     && bnd.passwordInput.text.toString()

@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -14,6 +16,7 @@ import com.example.semestralmobv.databinding.FragmentLoginBinding
 import com.example.semestralmobv.ui.viewmodels.AuthorizationViewModel
 import com.example.semestralmobv.utils.PasswordUtils
 import com.example.semestralmobv.utils.PreferencesData
+import com.example.semestralmobv.utils.SystemUtils
 import com.example.semestralmobv.utils.ViewModelFactoryProvider
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -33,14 +36,17 @@ class FragmentLogin : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        activity?.findViewById<ImageView>(R.id.back_button)?.visibility = View.GONE
+        activity?.findViewById<TextView>(R.id.screen_title)?.text = ""
+        activity?.findViewById<ImageView>(R.id.logout)?.visibility = View.GONE
+
         super.onViewCreated(view, savedInstanceState)
 
         nav = view.findNavController()
@@ -55,13 +61,13 @@ class FragmentLogin : Fragment() {
             model = authorizationViewModel
         }.also { bnd ->
             bnd.login.setOnClickListener {
+                SystemUtils.closeKeyboard(view)
                 if (bnd.usernameInput.text.toString()
                         .isNotBlank() && bnd.passwordInput.text.toString().isNotBlank()
                 ) {
                     val hashPass = PasswordUtils.hash(bnd.passwordInput.text.toString())
                     authorizationViewModel.login(
-                        binding.usernameInput.text.toString(),
-                        String(hashPass)
+                        binding.usernameInput.text.toString(), String(hashPass)
                     )
                 } else {
                     authorizationViewModel.setMessage("Fill in name and password")

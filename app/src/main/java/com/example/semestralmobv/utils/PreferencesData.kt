@@ -13,8 +13,8 @@ class PreferencesData private constructor() {
         )
     }
 
-
     fun clearData(context: Context?) {
+        context?.let { ViewModelFactoryProvider.provideDataRepository(it) }
         val sharedPref = getSharedPreferences(context) ?: return
         val editor = sharedPref.edit()
         editor.clear()

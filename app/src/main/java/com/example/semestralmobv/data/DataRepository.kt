@@ -1,12 +1,13 @@
 package com.example.semestralmobv.data
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import com.example.semestralmobv.data.api.ApiService
 import com.example.semestralmobv.data.api.models.CheckInPubArgs
+import com.example.semestralmobv.data.api.models.FriendArgs
 import com.example.semestralmobv.data.api.models.UserArgs
 import com.example.semestralmobv.data.api.models.UserResponse
+import com.example.semestralmobv.data.db.dao.FriendItemDao
 import com.example.semestralmobv.data.db.dao.PubItemDao
+import com.example.semestralmobv.data.db.models.FriendItem
 import com.example.semestralmobv.data.db.models.PubItem
 import com.example.semestralmobv.ui.viewmodels.NearbyPub
 import com.example.semestralmobv.ui.viewmodels.SortBy
@@ -16,10 +17,12 @@ import kotlinx.coroutines.withContext
 import java.io.IOException
 
 class DataRepository private constructor(
-    private val service: ApiService, val pubCache: PubItemDao
+    private val service: ApiService,
+    private val pubCache: PubItemDao,
+    private val friendCache: FriendItemDao
 ) {
 
-    suspend fun getAllFromDb(isAsc: Boolean, sortBy: SortBy?): List<PubItem>? {
+    suspend fun getAllPubsFromDb(isAsc: Boolean, sortBy: SortBy?): List<PubItem>? {
         var pubs: List<PubItem>?
         withContext(Dispatchers.IO) {
             pubs = when (sortBy) {
@@ -28,6 +31,14 @@ class DataRepository private constructor(
             }
         }
         return pubs
+    }
+
+    suspend fun getAllFriendsFromDb(): List<FriendItem>? {
+        var friends: List<FriendItem>?
+        withContext(Dispatchers.IO) {
+            friends = friendCache.getAll()
+        }
+        return friends
     }
 
     suspend fun login(
@@ -214,14 +225,60 @@ class DataRepository private constructor(
         }
     }
 
+    suspend fun refreshFriends(
+        onResolved: (response: String) -> Unit, onError: (response: String) -> Unit
+    ) {
+        withContext(Dispatchers.IO) {
+            try {
+                val resp = service.getFriends().execute()
+                if (resp.isSuccessful) {
+                    resp.body()?.let { friendsData ->
+                        val friendItems: List<FriendItem> = friendsData.map { friend ->
+                            friend.asDatabaseModel()
+                        }
+                        friendCache.deleteAll()
+                        friendCache.insertAll(friendItems)
+                        onResolved("Successfully loaded friends.")
+                    }
+                } else {
+                    onError("Failed to load friends list.")
+                }
+            } catch (ex: IOException) {
+                onError("Failed to load friends, check internet connection")
+            } catch (ex: Exception) {
+                onError("Failed to load friends, error.")
+            }
+        }
+    }
+
+    suspend fun addFriend(
+        name: String, onResolved: (response: String) -> Unit, onError: (response: String) -> Unit
+    ) {
+        withContext(Dispatchers.IO) {
+            try {
+                val resp = service.addFriend    (FriendArgs(name)).execute()
+                if(resp.isSuccessful){
+                    onResolved("Friend $name successfully added.")
+                }else{
+                    onError("Failed to add a friend, try a different name.")
+                }
+            } catch (ex: IOException) {
+                onError("Failed to add a friend, check internet connection")
+            } catch (ex: Exception) {
+                onError("Failed to add a friend, error.")
+            }
+        }
+    }
+
     companion object {
         @Volatile
         private var INSTANCE: DataRepository? = null
 
-        fun getInstance(service: ApiService, pubCache: PubItemDao): DataRepository =
-            INSTANCE ?: synchronized(this) {
-                INSTANCE ?: DataRepository(service, pubCache).also { INSTANCE = it }
-            }
+        fun getInstance(
+            service: ApiService, pubCache: PubItemDao, friendCache: FriendItemDao
+        ): DataRepository = INSTANCE ?: synchronized(this) {
+            INSTANCE ?: DataRepository(service, pubCache, friendCache).also { INSTANCE = it }
+        }
 
     }
 }

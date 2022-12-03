@@ -1,35 +1,35 @@
-package com.example.semestralmobv.ui.components.nearbyPubsRecyclerView.adapter
+package com.example.semestralmobv.ui.components.friendsRecyclerView.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.semestralmobv.R
-import com.example.semestralmobv.ui.fragments.nearbyPubs.SelectPubAction
-import com.example.semestralmobv.ui.viewmodels.NearbyPub
+import com.example.semestralmobv.data.db.models.FriendItem
+import com.example.semestralmobv.ui.fragments.pubs.FragmentPubsDirections
 import com.example.semestralmobv.utils.autoNotify
 import kotlin.properties.Delegates
 
-class NearbyPubsAdapter(val selectPubAction: SelectPubAction? = null) :
-    RecyclerView.Adapter<NearbyPubsAdapter.ItemViewHolder>() {
-    var items: List<NearbyPub> by Delegates.observable(emptyList()) { _, old, new ->
+class FriendsAdapter : RecyclerView.Adapter<FriendsAdapter.ItemViewHolder>() {
+    var items: List<FriendItem> by Delegates.observable(emptyList()) { _, old, new ->
         autoNotify(old, new) { o, n ->
-            o.id.compareTo(n.id) == 0
+            o.localId.compareTo(n.localId) == 0
         }
     }
+    var nav: NavController? by Delegates.observable(null) { _, old, new -> old != new }
+
 
     class ItemViewHolder(
         private val parent: ViewGroup, view: View = LayoutInflater.from(parent.context).inflate(
-            R.layout.nearby_pub_list_item, parent, false
+            R.layout.frient_list_item, parent, false
         )
     ) : RecyclerView.ViewHolder(view) {
-        val nameView: TextView = view.findViewById(R.id.nearest_pub_item_name)
-        val usersView: TextView = view.findViewById(R.id.nearby_pub_item_distance)
+        val nameView: TextView = view.findViewById(R.id.friend_item_name)
+        val pubView: TextView = view.findViewById(R.id.friend_item_pub_name)
         val card: ConstraintLayout = view.findViewById(R.id.nearby_pub_item_card)
     }
 
@@ -41,10 +41,12 @@ class NearbyPubsAdapter(val selectPubAction: SelectPubAction? = null) :
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val item = items[position]
 
-        holder.nameView.text = item.name
-        holder.usersView.text = "Distance (m): " + "%.2f m".format(item.distance)
-        holder.card.setOnClickListener {
-            selectPubAction?.selectPub(item)
+        holder.nameView.text = item.userName
+        holder.pubView.text = item.pubName
+        if (item.pubId != null && item.pubId.isNotBlank()) {
+            holder.card.setOnClickListener {
+                nav?.navigate(FragmentPubsDirections.actionToFragmentPubDetail(item.pubId, "fiends"))
+            }
         }
     }
 

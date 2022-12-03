@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -29,6 +31,7 @@ class FragmentPubDetail : Fragment() {
     private lateinit var animation: LottieAnimationView
 
     private lateinit var id: String
+    private var destination: String? = null
     private var lat = ""
     private var long = ""
     private var pubName = ""
@@ -39,6 +42,7 @@ class FragmentPubDetail : Fragment() {
         )[PubDetailViewModel::class.java]
         super.onCreate(savedInstanceState)
         id = arguments?.getString("id").toString()
+        destination = arguments?.getString("destination").toString()
         pubDetailViewModel.loadPub(id)
     }
 
@@ -50,6 +54,12 @@ class FragmentPubDetail : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val backButton = activity?.findViewById<ImageView>(R.id.back_button)
+        backButton?.visibility = View.VISIBLE
+        activity?.findViewById<TextView>(R.id.screen_title)?.text = ""
+        val logoutButton = activity?.findViewById<ImageView>(R.id.logout)
+        logoutButton?.visibility = View.VISIBLE
+
         super.onViewCreated(view, savedInstanceState)
         nav = view.findNavController()
 
@@ -105,17 +115,23 @@ class FragmentPubDetail : Fragment() {
                 startActivity(mapIntent)
             }
 
-            bnd.logout.setOnClickListener {
-                PreferencesData.getInstance().clearData(requireContext())
-                nav.navigate(R.id.action_to_login)
+            backButton?.setOnClickListener {
+                nav.popBackStack(
+                    if (destination == "fiends") {
+                        R.id.fragmentFriends
+                    } else {
+                        R.id.fragmentPubs
+                    }, false
+                )
             }
 
-            bnd.backButton.setOnClickListener {
-                nav.popBackStack(R.id.fragmentPubs, false)
+            logoutButton?.setOnClickListener {
+                PreferencesData.getInstance().clearData(context)
+                nav.navigate(R.id.action_to_login)
             }
         }
 
-        pubDetailViewModel.message.observe(viewLifecycleOwner){
+        pubDetailViewModel.message.observe(viewLifecycleOwner) {
             if (PreferencesData.getInstance().getUserItem(requireContext()) == null) {
                 nav.navigate(R.id.action_to_login)
             }

@@ -1,14 +1,12 @@
 package com.example.semestralmobv.ui.viewmodels
 
-import android.util.Log
-import android.view.animation.Transformation
 import androidx.lifecycle.*
 import com.example.semestralmobv.data.DataRepository
 import com.example.semestralmobv.data.db.models.PubItem
 import kotlinx.coroutines.launch
 
 enum class SortBy {
-    DEFAULT, NAME, USERS
+    DEFAULT, NAME
 }
 
 class PubsViewModel(private val dataRepository: DataRepository) : ViewModel() {
@@ -38,7 +36,7 @@ class PubsViewModel(private val dataRepository: DataRepository) : ViewModel() {
 
     init {
         viewModelScope.launch {
-            val pubsFromDb = dataRepository.getAllFromDb(isAsc, SortBy.DEFAULT)
+            val pubsFromDb = dataRepository.getAllPubsFromDb(isAsc, SortBy.DEFAULT)
             if (pubsFromDb == null || pubsFromDb.isEmpty()) {
                 refreshPubsFromRepository()
             } else {
@@ -51,7 +49,7 @@ class PubsViewModel(private val dataRepository: DataRepository) : ViewModel() {
         viewModelScope.launch {
             loading.postValue(true)
             dataRepository.refreshPubs(resolvePubs, onError)
-            val pubsFromDb = dataRepository.getAllFromDb(isAsc, sortBy.value)
+            val pubsFromDb = dataRepository.getAllPubsFromDb(isAsc, sortBy.value)
             _pubs.postValue(pubsFromDb)
         }
     }
@@ -65,12 +63,9 @@ class PubsViewModel(private val dataRepository: DataRepository) : ViewModel() {
         }
         _sortBy.postValue(newSortBy)
         viewModelScope.launch {
-            val pubsFromDb = dataRepository.getAllFromDb(isAsc, newSortBy)
+            val pubsFromDb = dataRepository.getAllPubsFromDb(isAsc, newSortBy)
             _pubs.postValue(pubsFromDb)
         }
     }
 
-    fun setMessage(message: String) {
-        _message.postValue(message)
-    }
 }

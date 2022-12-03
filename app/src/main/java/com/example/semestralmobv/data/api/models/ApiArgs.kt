@@ -19,3 +19,5 @@ data class PubsTagsFilter(
     @SerializedName("tags.amenity") val amenity: String,
     @SerializedName("tags.name") val name: String
 )
+
+data class FriendArgs(val contact: String)
