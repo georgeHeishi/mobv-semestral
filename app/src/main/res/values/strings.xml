@@ -1,19 +1,45 @@
 <resources>
     <string name="app_name">semestralmobv</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_pubs">Pubs</string>
+    <string name="action_locate">Locate</string>
+    <string name="action_friends">Friends</string>
+    <string name="action_user">User</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="show">Ukáž na mape</string>
     <string name="enter_information">Zadajte údaje</string>
     <string name="name">Zadajte meno</string>
     <string name="pub_name">Zadajte názov podniku</string>
     <string name="pub_long">Zadajte zem. dĺžku podniku</string>
     <string name="pub_lat">Zadajte zem. šírku podniku</string>
-    <string name="confirm">Potvrdiť</string>
-    <string name="pub_item_name_placeholder">Placeholder</string>
-    <string name="add_item">Pridať</string>
-    <string name="delete_item">Vymazať</string>
-    <string name="default_sort">Predvolené</string>
-    <string name="name_sort">Meno</string>
+
+
+    <!--  Assignment needed string  -->
+    <string name="welcome">Welcome</string>
+    <string name="or">OR</string>
+    <string name="confirm">Confirm</string>
+    <string name="add_item">Add</string>
+    <string name="delete_item">Remove</string>
+
+    <string name="show">Show map</string>
+    <string name="default_sort">Users</string>
+    <string name="name_sort">Name</string>
+
+    <string name="login_title">Login</string>
+    <string name="signup_title">Sign up</string>
+    <string name="pubs_title">Pubs</string>
+    <string name="pub_detail_title">Pub detail</string>
+
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="repeatPassword">Repeat password</string>
+    <string name="login">Log in!</string>
+    <string name="signup">Sign up!</string>
+    <string name="logout">Log out</string>
+    <string name="create_account">Create an account</string>
+
+    <!--  Shared preferences keys  -->
+    <string name="preferences_key">com.example.semestralmobv.PREF_DATA</string>
+    <string name="preferences_user_name">com.example.semestralmobv.USER_NAME</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

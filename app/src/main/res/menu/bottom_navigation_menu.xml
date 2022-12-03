@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <item
+        android:id="@+id/fragmentPubs"
+        android:enabled="true"
+        android:icon="@drawable/pub"
+        android:title="@string/action_pubs" />
+    <item
+        android:id="@+id/fragmentNearbyPubs"
+        android:enabled="true"
+        android:icon="@drawable/pin"
+        android:title="@string/action_locate" />
+    <item
+        android:id="@+id/action_friends"
+        android:enabled="true"
+        android:icon="@drawable/friends"
+        android:title="@string/action_friends" />
+    <item
+        android:id="@+id/action_user"
+        android:enabled="true"
+        android:icon="@drawable/user"
+        android:title="@string/action_user" />
+</menu>
