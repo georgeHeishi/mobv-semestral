@@ -12,18 +12,16 @@ class NearbyPubsViewModel(private val dataRepository: DataRepository) : ViewMode
     val message: LiveData<String>
         get() = _message
 
-    val loading = MutableLiveData(false)
+    val loading = MutableLiveData(true)
 
     private val onError = { errorMessage: String ->
         loading.postValue(false)
         _message.postValue(errorMessage)
     }
 
-
     private val _isCheckedIn = MutableLiveData<Boolean>()
     val isCheckedIn: LiveData<Boolean>
         get() = _isCheckedIn
-
 
     val deviceLocation = MutableLiveData<LatLongLocation>(null)
 

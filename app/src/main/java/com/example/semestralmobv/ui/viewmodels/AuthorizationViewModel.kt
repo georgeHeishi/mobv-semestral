@@ -25,6 +25,7 @@ class AuthorizationViewModel(private val dataRepository: DataRepository) : ViewM
         viewModelScope.launch {
             _loading.postValue(true)
             dataRepository.login(name, password, bindUser, bindMessage)
+            _loading.postValue(false)
         }
     }
 
@@ -32,6 +33,7 @@ class AuthorizationViewModel(private val dataRepository: DataRepository) : ViewM
         viewModelScope.launch {
             _loading.postValue(true)
             dataRepository.signup(name, password, bindUser, bindMessage)
+            _loading.postValue(false)
         }
     }
 

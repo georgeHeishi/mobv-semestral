@@ -3,7 +3,6 @@
     <string name="action_pubs">Pubs</string>
     <string name="action_locate">Locate</string>
     <string name="action_friends">Friends</string>
-    <string name="action_user">User</string>
     <!-- Strings used for fragments for navigation -->
     <string name="enter_information">Zadajte údaje</string>
     <string name="name">Zadajte meno</string>
@@ -27,6 +26,7 @@
     <string name="signup_title">Sign up</string>
     <string name="pubs_title">Pubs</string>
     <string name="pub_detail_title">Pub detail</string>
+    <string name="select">Select</string>
 
     <string name="username">Username</string>
     <string name="password">Password</string>
@@ -35,6 +35,8 @@
     <string name="signup">Sign up!</string>
     <string name="logout">Log out</string>
     <string name="create_account">Create an account</string>
+    <string name="add_friend">Add a friend</string>
+    <string name="friend_name">Friend name</string>
 
     <!--  Shared preferences keys  -->
     <string name="preferences_key">com.example.semestralmobv.PREF_DATA</string>

@@ -8,14 +8,12 @@
         android:id="@+id/fragmentLogin"
         android:name="com.example.semestralmobv.ui.fragments.login.FragmentLogin"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login">
-    </fragment>
+        tools:layout="@layout/fragment_login" />
     <fragment
         android:id="@+id/fragmentSignup"
         android:name="com.example.semestralmobv.ui.fragments.login.FragmentSignup"
         android:label="fragment_signup"
-        tools:layout="@layout/fragment_signup">
-    </fragment>
+        tools:layout="@layout/fragment_signup" />
     <fragment
         android:id="@+id/fragmentPubDetail"
         android:name="com.example.semestralmobv.ui.fragments.pubDetail.FragmentPubDetail"
@@ -24,18 +22,31 @@
         <argument
             android:name="id"
             app:argType="string" />
+        <argument
+            android:name="destination"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/fragmentPubs"
         android:name="com.example.semestralmobv.ui.fragments.pubs.FragmentPubs"
         android:label="fragment_pubs"
-        tools:layout="@layout/fragment_pubs">
-    </fragment>
+        tools:layout="@layout/fragment_pubs" />
     <fragment
         android:id="@+id/fragmentNearbyPubs"
         android:name="com.example.semestralmobv.ui.fragments.nearbyPubs.FragmentNearbyPubs"
         android:label="fragment_sign_into_pubs"
         tools:layout="@layout/fragment_nearby_pubs" />
+    <fragment
+        android:id="@+id/fragmentFriends"
+        android:name="com.example.semestralmobv.ui.fragments.friends.FragmentFriends"
+        android:label="fragment_friends"
+        tools:layout="@layout/fragment_friends" />
+    <fragment
+        android:id="@+id/fragmentAddFriend"
+        android:name="com.example.semestralmobv.ui.fragments.friends.FragmentAddFriend"
+        android:label="fragment_add_friend"
+        tools:layout="@layout/fragment_add_friend" />
 
     <action
         android:id="@+id/action_to_login"
@@ -52,4 +63,10 @@
     <action
         android:id="@+id/action_to_fragmentSignIntoPubs"
         app:destination="@id/fragmentNearbyPubs" />
+    <action
+        android:id="@+id/action_to_friends"
+        app:destination="@id/fragmentFriends" />
+    <action
+        android:id="@+id/action_to_add_friend"
+        app:destination="@id/fragmentAddFriend" />
 </navigation>

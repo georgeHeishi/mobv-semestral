@@ -3,7 +3,6 @@ package com.example.semestralmobv.ui.fragments.nearbyPubs
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.PendingIntent
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -12,13 +11,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import com.airbnb.lottie.LottieAnimationView
 import com.example.semestralmobv.GeofenceBroadcastReceiver
@@ -80,7 +80,13 @@ class FragmentNearbyPubs : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        activity?.findViewById<ImageView>(R.id.back_button)?.visibility = View.GONE
+        activity?.findViewById<TextView>(R.id.screen_title)?.text = "Nearby Pubs"
+        val logoutButton =  activity?.findViewById<ImageView>(R.id.logout)
+        logoutButton?.visibility = View.VISIBLE
+
         super.onViewCreated(view, savedInstanceState)
         nav = view.findNavController()
 
@@ -103,10 +109,6 @@ class FragmentNearbyPubs : Fragment() {
 
             spinner = bnd.spinner
             checkInAnimation = bnd.checkIn
-            bnd.logout.setOnClickListener {
-                PreferencesData.getInstance().clearData(requireContext())
-                nav.navigate(R.id.action_to_login)
-            }
 
             bnd.checkIn.setOnClickListener {
                 if (checkBackgroundPermissions()) {
@@ -157,6 +159,11 @@ class FragmentNearbyPubs : Fragment() {
         } else {
             nav.navigate(R.id.action_to_pubs)
         }
+
+        logoutButton?.setOnClickListener {
+            PreferencesData.getInstance().clearData(context)
+            nav.navigate(R.id.action_to_login)
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -191,7 +198,7 @@ class FragmentNearbyPubs : Fragment() {
         val request = GeofencingRequest.Builder().apply {
             addGeofence(
                 Geofence.Builder()
-                    .setRequestId("mygeofence")
+                    .setRequestId("geofence")
                     .setCircularRegion(lat, lon, 300F)
                     .setExpirationDuration(1000L * 60 * 60 * 24)
                     .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_EXIT)
@@ -200,9 +207,6 @@ class FragmentNearbyPubs : Fragment() {
         }.build()
 
         geofencingClient.addGeofences(request, geofenceIntent).run {
-            addOnSuccessListener {
-                nav.navigate(R.id.action_to_pubs)
-            }
             addOnFailureListener {
                 nearbyPubsViewModel.setMessage("Geofence failed to create.") //permission is not granted for All times.
                 it.printStackTrace()
@@ -219,7 +223,7 @@ class FragmentNearbyPubs : Fragment() {
                 setMessage("Allow background location (All times) for detecting when you leave bar.")
                 setPositiveButton(
                     "OK"
-                ) { _, id ->
+                ) { _, _ ->
                     locationPermissionRequest.launch(
                         arrayOf(
                             Manifest.permission.ACCESS_BACKGROUND_LOCATION

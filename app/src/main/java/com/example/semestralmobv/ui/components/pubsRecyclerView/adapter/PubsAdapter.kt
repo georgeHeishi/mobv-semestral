@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.NavController
 import com.example.semestralmobv.R
 import com.example.semestralmobv.data.db.models.PubItem
@@ -13,8 +13,7 @@ import com.example.semestralmobv.ui.fragments.pubs.FragmentPubsDirections
 import com.example.semestralmobv.utils.autoNotify
 import kotlin.properties.Delegates
 
-class PubsAdapter(
-) : RecyclerView.Adapter<PubsAdapter.ItemViewHolder>() {
+class PubsAdapter : RecyclerView.Adapter<PubsAdapter.ItemViewHolder>() {
     var items: List<PubItem> by Delegates.observable(emptyList()) { _, old, new ->
         autoNotify(old, new) { o, n ->
             o.localId.compareTo(n.localId) == 0
@@ -31,7 +30,7 @@ class PubsAdapter(
         val nameView: TextView = view.findViewById(R.id.pub_item_name)
         val typeView: TextView = view.findViewById(R.id.pub_item_type)
         val usersView: TextView = view.findViewById(R.id.pub_item_users)
-        val card: CardView = view.findViewById(R.id.pub_item_card)
+        val card: ConstraintLayout = view.findViewById(R.id.pub_item_card)
 
     }
 
@@ -47,7 +46,7 @@ class PubsAdapter(
         holder.typeView.text = item.amenity
         holder.usersView.text = item.users.toString()
         holder.card.setOnClickListener {
-            nav?.navigate(FragmentPubsDirections.actionToFragmentPubDetail(id))
+            nav?.navigate(FragmentPubsDirections.actionToFragmentPubDetail(id, "pubs"))
         }
     }
 

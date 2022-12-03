@@ -40,6 +40,22 @@ interface ApiService {
     @Headers("mobv-auth: accept")
     fun checkInPub(@Body pub: CheckInPubArgs): Call<Unit>
 
+    @GET("contact/list.php")
+    @Headers("mobv-auth: accept")
+    fun getFriends(): Call<List<FriendListResponse>>
+
+    @POST("contact/message.php")
+    @Headers("mobv-auth: accept")
+    fun addFriend(@Body contact: FriendArgs): Call<Unit>
+
+    @GET("contact/friends.php")
+    @Headers("mobv-auth: accept")
+    fun getFollowers():Call<Unit>
+
+    @POST("contact/delete.php")
+    @Headers("mobv-auth: accept")
+    fun removeFriend(@Body contact: FriendArgs): Call<Unit>
+
     companion object {
         fun create(context: Context): ApiService {
             val client =
