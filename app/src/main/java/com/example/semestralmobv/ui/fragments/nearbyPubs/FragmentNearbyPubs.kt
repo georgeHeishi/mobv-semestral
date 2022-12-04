@@ -64,6 +64,15 @@ class FragmentNearbyPubs : Fragment() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        if (!LocationUtils.checkPermissions(requireContext())) {
+            locationPermissionRequest.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+            )
+        }
+
         nearbyPubsViewModel = ViewModelProvider(
             this, ViewModelFactoryProvider.provideViewModelFactory(requireContext())
         )[NearbyPubsViewModel::class.java]
@@ -84,7 +93,7 @@ class FragmentNearbyPubs : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.findViewById<ImageView>(R.id.back_button)?.visibility = View.GONE
         activity?.findViewById<TextView>(R.id.screen_title)?.text = "Nearby Pubs"
-        val logoutButton =  activity?.findViewById<ImageView>(R.id.logout)
+        val logoutButton = activity?.findViewById<ImageView>(R.id.logout)
         logoutButton?.visibility = View.VISIBLE
 
         super.onViewCreated(view, savedInstanceState)
@@ -190,19 +199,17 @@ class FragmentNearbyPubs : Fragment() {
             nearbyPubsViewModel.setMessage("Geofence failed, permissions not granted.")
         }
         val geofenceIntent = PendingIntent.getBroadcast(
-            requireContext(), 0,
+            requireContext(),
+            0,
             Intent(requireContext(), GeofenceBroadcastReceiver::class.java),
             PendingIntent.FLAG_IMMUTABLE
         )
 
         val request = GeofencingRequest.Builder().apply {
             addGeofence(
-                Geofence.Builder()
-                    .setRequestId("geofence")
-                    .setCircularRegion(lat, lon, 300F)
+                Geofence.Builder().setRequestId("geofence").setCircularRegion(lat, lon, 300F)
                     .setExpirationDuration(1000L * 60 * 60 * 24)
-                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_EXIT)
-                    .build()
+                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_EXIT).build()
             )
         }.build()
 
@@ -246,8 +253,7 @@ class FragmentNearbyPubs : Fragment() {
     private fun checkBackgroundPermissions(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                requireContext(), Manifest.permission.ACCESS_BACKGROUND_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         } else {
             return true
@@ -256,11 +262,9 @@ class FragmentNearbyPubs : Fragment() {
 
     private fun checkPermissions(): Boolean {
         return ActivityCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.ACCESS_FINE_LOCATION
+            requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.ACCESS_COARSE_LOCATION
+            requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
     }
 
