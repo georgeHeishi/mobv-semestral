@@ -1,6 +1,5 @@
 package com.example.semestralmobv
 
-
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -8,21 +7,11 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkRequest
 import com.google.android.gms.location.Geofence
-import com.google.android.gms.location.GeofenceStatusCodes
 import com.google.android.gms.location.GeofencingEvent
 
 class GeofenceBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
-        val geofencingEvent = intent?.let { GeofencingEvent.fromIntent(it) }
-        if (geofencingEvent != null) {
-            if (geofencingEvent.hasError()) {
-                val errorMessage = GeofenceStatusCodes
-                    .getStatusCodeString(geofencingEvent.errorCode)
-                return
-            }
-        } else {
-            return
-        }
+        val geofencingEvent = intent?.let { GeofencingEvent.fromIntent(it) } ?: return
 
         // Get the transition type.
         val geofenceTransition = geofencingEvent.geofenceTransition

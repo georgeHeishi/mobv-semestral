@@ -21,11 +21,7 @@ import com.example.semestralmobv.utils.PreferencesData
 import com.example.semestralmobv.utils.ViewModelFactoryProvider
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
-import com.mapbox.maps.MapInitOptions
-import com.mapbox.maps.MapView
 import com.mapbox.maps.Style
-import com.mapbox.maps.plugin.Plugin
-import com.mapbox.maps.plugin.animation.camera
 
 class FragmentPubDetail : Fragment() {
     private lateinit var pubDetailViewModel: PubDetailViewModel

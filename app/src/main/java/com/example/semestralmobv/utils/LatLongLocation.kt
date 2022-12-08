@@ -7,7 +7,7 @@ import androidx.core.app.ActivityCompat
 
 class LatLongLocation(val lat: Double, val long: Double)
 
-class LocationUtils() {
+class LocationUtils {
     companion object {
         fun checkPermissions(context: Context): Boolean {
             return ActivityCompat.checkSelfPermission(

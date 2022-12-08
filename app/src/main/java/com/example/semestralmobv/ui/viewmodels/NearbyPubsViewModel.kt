@@ -11,7 +11,7 @@ class NearbyPubsViewModel(private val dataRepository: DataRepository) : ViewMode
     val message: LiveData<String>
         get() = _message
 
-    val loading = MutableLiveData(true)
+    val loading = MutableLiveData(false)
 
     private val onError = { errorMessage: String ->
         loading.postValue(false)

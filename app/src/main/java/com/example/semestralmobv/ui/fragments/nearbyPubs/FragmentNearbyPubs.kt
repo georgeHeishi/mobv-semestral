@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -45,7 +46,7 @@ class FragmentNearbyPubs : Fragment() {
 
     private lateinit var nav: NavController
     private lateinit var spinner: LottieAnimationView
-    private lateinit var checkInAnimation: LottieAnimationView
+    private lateinit var checkInPin: ImageView
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var geofencingClient: GeofencingClient
 
@@ -89,7 +90,7 @@ class FragmentNearbyPubs : Fragment() {
         return binding.root
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "MissingPermission")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.findViewById<ImageView>(R.id.back_button)?.visibility = View.GONE
         activity?.findViewById<TextView>(R.id.screen_title)?.text = "Nearby Pubs"
@@ -98,6 +99,12 @@ class FragmentNearbyPubs : Fragment() {
 
         super.onViewCreated(view, savedInstanceState)
         nav = view.findNavController()
+
+        if (LocationUtils.checkPermissions(requireContext())) {
+            postLocation()
+        } else {
+            nav.navigate(R.id.action_to_pubs)
+        }
 
         val foundUser = PreferencesData.getInstance().getUserItem(requireContext())
         if ((foundUser?.uid ?: "").isBlank()) {
@@ -109,7 +116,6 @@ class FragmentNearbyPubs : Fragment() {
             lifecycleOwner = viewLifecycleOwner
             model = nearbyPubsViewModel
         }.also { bnd ->
-
             bnd.recycleView.selectPubAction = object : SelectPubAction {
                 override fun selectPub(
                     pub: NearbyPub,
@@ -125,7 +131,7 @@ class FragmentNearbyPubs : Fragment() {
             }
 
             spinner = bnd.spinner
-            checkInAnimation = bnd.checkIn
+            checkInPin = bnd.checkIn
 
             nearbyPubsViewModel.checkedInPub.observe(viewLifecycleOwner) { sP ->
                 bnd.nearestPubItemName.text = sP?.name
@@ -134,8 +140,6 @@ class FragmentNearbyPubs : Fragment() {
 
             nearbyPubsViewModel.isCheckedIn.observe(viewLifecycleOwner) {
                 if (it) {
-                    checkInAnimation.frame = checkInAnimation.maxFrame.toInt()
-                    nearbyPubsViewModel.setMessage("Checked in.")
                     nearbyPubsViewModel.deviceLocation.value?.let { location ->
                         createFence(location.lat, location.long)
                     }
@@ -150,20 +154,12 @@ class FragmentNearbyPubs : Fragment() {
             }
         }
 
-
-
         nearbyPubsViewModel.loading.observe(viewLifecycleOwner) {
             if (it == true) {
                 spinner.playAnimation()
             } else {
                 spinner.cancelAnimation()
             }
-        }
-
-        if (LocationUtils.checkPermissions(requireContext())) {
-            loadData()
-        } else {
-            nav.navigate(R.id.action_to_pubs)
         }
 
         logoutButton?.setOnClickListener {
@@ -173,8 +169,7 @@ class FragmentNearbyPubs : Fragment() {
     }
 
     @SuppressLint("MissingPermission")
-    private fun loadData() {
-        nearbyPubsViewModel.loading.postValue(true)
+    private fun postLocation() {
         fusedLocationClient.getCurrentLocation(
             CurrentLocationRequest.Builder().setDurationMillis(30000).setMaxUpdateAgeMillis(60000)
                 .build(), null
@@ -185,10 +180,9 @@ class FragmentNearbyPubs : Fragment() {
                         it.latitude, it.longitude
                     )
                 )
-            } ?: nearbyPubsViewModel.loading.postValue(false)
+            }
         }
     }
-
 
     @SuppressLint("MissingPermission")
     private fun createFence(lat: Double, lon: Double) {
