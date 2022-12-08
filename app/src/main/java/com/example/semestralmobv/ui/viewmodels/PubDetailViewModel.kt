@@ -12,14 +12,8 @@ class PubDetailViewModel(private val dataRepository: DataRepository) : ViewModel
 
     val loading = MutableLiveData(false)
 
-    val pubs: LiveData<List<PubItem>?> = liveData {
-        loading.postValue(true)
-        emit(dataRepository.getAllPubsFromDb(false,SortBy.DEFAULT))
-        loading.postValue(false)
-    }
 
-    private val _pub = MutableLiveData<PubDetail>()
-    val pub: LiveData<PubDetail> get() = _pub
+    var id = MutableLiveData<String?>(null)
 
     private val resolvePubs = { _: String -> }
 
@@ -27,14 +21,13 @@ class PubDetailViewModel(private val dataRepository: DataRepository) : ViewModel
         _message.postValue(errorMessage)
     }
 
-
-    fun loadPub(id: String) {
-        viewModelScope.launch {
+    val pub: LiveData<PubDetail> = id.switchMap {
+        liveData {
             loading.postValue(true)
-            val foundPub = dataRepository.pubDetail(id, resolvePubs, onError)
-            val pubFromDb = pubs.value?.find { it.id == id }
+            val foundPub = id.value?.let { dataRepository.pubDetail(it, resolvePubs, onError) }
+            val pubFromDb = id.value?.let { dataRepository.getPubById(it) }
             foundPub?.let {
-                _pub.postValue(PubDetail(
+                emit(PubDetail(
                     foundPub.id,
                     foundPub.name,
                     foundPub.type,
@@ -52,10 +45,10 @@ class PubDetailViewModel(private val dataRepository: DataRepository) : ViewModel
         }
     }
 
-    fun refresh(id: String) {
+    fun refresh(localId: String) {
         viewModelScope.launch {
             loading.postValue(true)
-            loadPub(id)
+            id.postValue(localId)
             dataRepository.refreshPubs(resolvePubs, onError)
             loading.postValue(false)
         }

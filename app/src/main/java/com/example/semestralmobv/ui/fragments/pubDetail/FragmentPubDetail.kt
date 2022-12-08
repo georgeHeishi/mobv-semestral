@@ -43,7 +43,7 @@ class FragmentPubDetail : Fragment() {
         super.onCreate(savedInstanceState)
         id = arguments?.getString("id").toString()
         destination = arguments?.getString("destination").toString()
-        pubDetailViewModel.loadPub(id)
+        pubDetailViewModel.id.postValue(id)
     }
 
     override fun onCreateView(
@@ -101,6 +101,9 @@ class FragmentPubDetail : Fragment() {
                 }
                 pubDetail.tags?.website.let {
                     bnd.pubWebsite.text = it ?: ""
+                }
+                pubDetail.tags?.openingHours.let {
+                    bnd.openingHours.text = it ?: ""
                 }
             }
 

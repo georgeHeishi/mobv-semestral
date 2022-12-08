@@ -33,6 +33,14 @@ class DataRepository private constructor(
         return pubs
     }
 
+    suspend fun getPubById(id: String): PubItem?{
+        var pub: PubItem?
+        withContext(Dispatchers.IO){
+            pub = pubCache.getById(id)
+        }
+        return  pub
+    }
+
     suspend fun getAllFriendsFromDb(): List<FriendItem>? {
         var friends: List<FriendItem>?
         withContext(Dispatchers.IO) {

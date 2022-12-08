@@ -14,6 +14,9 @@ interface PubItemDao {
     @Query("DELETE FROM pubs")
     suspend fun deleteAll()
 
+    @Query("SELECT * FROM pubs WHERE id=:id")
+    suspend fun getById(id: String): PubItem?
+
     @Query(
         "SELECT * FROM pubs ORDER BY " + "CASE WHEN :isAsc = 1 THEN users END ASC," + "CASE WHEN :isAsc = 0 THEN users END DESC"
     )

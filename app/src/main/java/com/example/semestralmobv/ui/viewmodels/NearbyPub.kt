@@ -30,7 +30,6 @@ open class NearbyPub(
         result = 31 * result + type.hashCode()
         result = 31 * result + lat.hashCode()
         result = 31 * result + long.hashCode()
-//        result = 31 * result + distance.hashCode()
         return result
     }
 
