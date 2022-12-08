@@ -39,3 +39,10 @@ fun NearbyPubsRecyclerView.applyItems(
 ) {
     (adapter as NearbyPubsAdapter).items = nearbyPubs ?: emptyList()
 }
+
+@BindingAdapter(value = ["selectedId"])
+fun NearbyPubsRecyclerView.applyItems(
+    selectedId: String?
+) {
+    (adapter as NearbyPubsAdapter).selectedId = selectedId
+}

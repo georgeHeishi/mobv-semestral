@@ -21,7 +21,7 @@ class PubDetailViewModel(private val dataRepository: DataRepository) : ViewModel
         _message.postValue(errorMessage)
     }
 
-    val pub: LiveData<PubDetail> = id.switchMap {
+    var pub: LiveData<PubDetail> = id.switchMap {
         liveData {
             loading.postValue(true)
             val foundPub = id.value?.let { dataRepository.pubDetail(it, resolvePubs, onError) }

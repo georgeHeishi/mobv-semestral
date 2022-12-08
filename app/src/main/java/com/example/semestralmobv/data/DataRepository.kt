@@ -208,7 +208,7 @@ class DataRepository private constructor(
     }
 
     suspend fun checkInPub(
-        pub: NearbyPub, onResolved: (response: Boolean) -> Unit, onError: (response: String) -> Unit
+        pub: NearbyPub, onResolved: (checkedIntoPub: NearbyPub) -> Unit, onError: (response: String) -> Unit
     ) {
         if (pub.name == null || pub.type == null) {
             return
@@ -221,7 +221,7 @@ class DataRepository private constructor(
                     )
                 ).execute()
                 if (resp.isSuccessful) {
-                    onResolved(true)
+                    onResolved(pub)
                 } else {
                     onError("Failed to check into pub.")
                 }

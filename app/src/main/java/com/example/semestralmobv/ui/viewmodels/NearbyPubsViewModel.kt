@@ -1,6 +1,5 @@
 package com.example.semestralmobv.ui.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.example.semestralmobv.data.DataRepository
 import com.example.semestralmobv.utils.LatLongLocation
@@ -19,7 +18,7 @@ class NearbyPubsViewModel(private val dataRepository: DataRepository) : ViewMode
         _message.postValue(errorMessage)
     }
 
-    private val _isCheckedIn = MutableLiveData<Boolean>()
+    private val _isCheckedIn = MutableLiveData(false)
     val isCheckedIn: LiveData<Boolean>
         get() = _isCheckedIn
 
@@ -27,14 +26,20 @@ class NearbyPubsViewModel(private val dataRepository: DataRepository) : ViewMode
 
     private val _checkedInPub = MutableLiveData<NearbyPub?>()
 
-    val selectedPub = MutableLiveData<NearbyPub>()
+    val checkedInPub: LiveData<NearbyPub?>
+        get() = _checkedInPub
+
+    private val _selectedId = MutableLiveData<String?>()
+
+    val selectedId: LiveData<String?>
+        get() = _selectedId
 
     val nearbyPubs: LiveData<List<NearbyPub>> = deviceLocation.switchMap { location ->
         liveData {
             loading.postValue(true)
             location?.let {
                 val nearPubs = dataRepository.nearPubs(location, onError)
-                selectedPub.postValue(nearPubs[0])
+                _selectedId.postValue(nearPubs[0].id)
                 emit(nearPubs)
             } ?: emit(listOf())
             loading.postValue(false)
@@ -42,36 +47,17 @@ class NearbyPubsViewModel(private val dataRepository: DataRepository) : ViewMode
     }
 
 
-    private val onCheckInResolve = { checkInStatus: Boolean ->
-        Log.i("checkInStatus", checkInStatus.toString())
-        _checkedInPub.postValue(selectedPub.value)
-        _isCheckedIn.postValue(checkInStatus)
-
+    private val onCheckInResolve = { checkedIntoPub: NearbyPub ->
+        _checkedInPub.postValue(checkedIntoPub)
+        _isCheckedIn.postValue(true)
     }
 
 
-    fun checkIntoSelected() {
-        _checkedInPub.value.run {
-            if (selectedPub.value?.id === _checkedInPub.value?.id) {
-                return
-            }
-        }
+    fun checkIntoPub(pub: NearbyPub) {
 
         viewModelScope.launch {
             delay(500)
-            selectedPub.value?.let {
-                dataRepository.checkInPub(it, onCheckInResolve, onError)
-            }
-        }
-    }
-
-    fun setSelectedPub(pub: NearbyPub) {
-        selectedPub.postValue(pub)
-        if (pub.id == _checkedInPub.value?.id) {
-            _isCheckedIn.postValue(true)
-        } else {
-            _isCheckedIn.postValue(false)
-
+            dataRepository.checkInPub(pub, onCheckInResolve, onError)
         }
     }
 

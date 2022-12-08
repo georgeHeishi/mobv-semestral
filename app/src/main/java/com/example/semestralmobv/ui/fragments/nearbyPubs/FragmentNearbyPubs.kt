@@ -111,29 +111,36 @@ class FragmentNearbyPubs : Fragment() {
         }.also { bnd ->
 
             bnd.recycleView.selectPubAction = object : SelectPubAction {
-                override fun selectPub(pub: NearbyPub) {
-                    nearbyPubsViewModel.setSelectedPub(pub)
+                override fun selectPub(
+                    pub: NearbyPub,
+                ) {
+                    if (checkBackgroundPermissions()) {
+                        nearbyPubsViewModel.checkIntoPub(pub)
+                    } else {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                            permissionDialog()
+                        }
+                    }
                 }
             }
 
             spinner = bnd.spinner
             checkInAnimation = bnd.checkIn
 
-            bnd.checkIn.setOnClickListener {
-                if (checkBackgroundPermissions()) {
-
-                    checkInAnimation.playAnimation()
-                    nearbyPubsViewModel.checkIntoSelected()
-                } else {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        permissionDialog()
-                    }
-                }
+            nearbyPubsViewModel.checkedInPub.observe(viewLifecycleOwner) { sP ->
+                bnd.nearestPubItemName.text = sP?.name
+                bnd.nearestPubItemType.text = sP?.type
             }
 
-            nearbyPubsViewModel.selectedPub.observe(viewLifecycleOwner) { sP ->
-                bnd.nearestPubItemName.text = sP.name
-                bnd.nearestPubItemType.text = sP.type
+            nearbyPubsViewModel.isCheckedIn.observe(viewLifecycleOwner) {
+                if (it) {
+                    checkInAnimation.frame = checkInAnimation.maxFrame.toInt()
+                    nearbyPubsViewModel.setMessage("Checked in.")
+                    nearbyPubsViewModel.deviceLocation.value?.let { location ->
+                        createFence(location.lat, location.long)
+                    }
+                    bnd.recycleView.adapter?.notifyDataSetChanged()
+                }
             }
         }
 
@@ -143,17 +150,7 @@ class FragmentNearbyPubs : Fragment() {
             }
         }
 
-        nearbyPubsViewModel.isCheckedIn.observe(viewLifecycleOwner) {
-            if (it) {
-                checkInAnimation.frame = checkInAnimation.maxFrame.toInt()
-                nearbyPubsViewModel.setMessage("Checked in.")
-                nearbyPubsViewModel.deviceLocation.value?.let { location ->
-                    createFence(location.lat, location.long)
-                }
-            } else {
-                checkInAnimation.frame = checkInAnimation.minFrame.toInt()
-            }
-        }
+
 
         nearbyPubsViewModel.loading.observe(viewLifecycleOwner) {
             if (it == true) {

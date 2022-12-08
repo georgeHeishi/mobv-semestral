@@ -19,6 +19,13 @@ import com.example.semestralmobv.databinding.FragmentPubDetailBinding
 import com.example.semestralmobv.ui.viewmodels.PubDetailViewModel
 import com.example.semestralmobv.utils.PreferencesData
 import com.example.semestralmobv.utils.ViewModelFactoryProvider
+import com.mapbox.geojson.Point
+import com.mapbox.maps.CameraOptions
+import com.mapbox.maps.MapInitOptions
+import com.mapbox.maps.MapView
+import com.mapbox.maps.Style
+import com.mapbox.maps.plugin.Plugin
+import com.mapbox.maps.plugin.animation.camera
 
 class FragmentPubDetail : Fragment() {
     private lateinit var pubDetailViewModel: PubDetailViewModel
@@ -49,7 +56,7 @@ class FragmentPubDetail : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentPubDetailBinding.inflate(inflater, container, false)
+        _binding = FragmentPubDetailBinding.inflate(inflater, container, false);
         return binding.root
     }
 
@@ -75,6 +82,8 @@ class FragmentPubDetail : Fragment() {
         }.also { bnd ->
             animation = bnd.animationView
             swipeContainer = bnd.swipeContainer
+
+            bnd.mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS)
 
             pubDetailViewModel.loading.observe(
                 viewLifecycleOwner
@@ -105,6 +114,12 @@ class FragmentPubDetail : Fragment() {
                 pubDetail.tags?.openingHours.let {
                     bnd.openingHours.text = it ?: ""
                 }
+
+                val cameraPosition =
+                    CameraOptions.Builder().center(Point.fromLngLat(pubDetail.long, pubDetail.lat))
+                        .zoom(18.0).build()
+
+                bnd.mapView.getMapboxMap().setCamera(cameraPosition)
             }
 
             bnd.swipeContainer.setOnRefreshListener {

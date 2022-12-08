@@ -76,4 +76,7 @@ dependencies {
 
     implementation "androidx.work:work-runtime-ktx:2.7.1"
     implementation 'com.airbnb.android:lottie:5.2.0'
+    implementation ('com.mapbox.maps:android:10.10.0'){
+        exclude group: 'group_name', module: 'module_name'
+    }
 }
